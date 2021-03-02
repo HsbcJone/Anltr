@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.example</groupId>
+    <artifactId>Anltr4-Hive-Grammer</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <antlr.version>4.9.1</antlr.version>
+      <!--  <antlr.version>4.7.2</antlr.version>-->
+        <antlr4test-maven-plugin.version>1.17</antlr4test-maven-plugin.version>
+        <junit.version>4.12</junit.version>
+    </properties>
+
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.antlr/antlr4-runtime -->
+        <dependency>
+            <groupId>org.antlr</groupId>
+            <artifactId>antlr4</artifactId>
+            <version>${antlr.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.antlr</groupId>
+            <artifactId>antlr4-runtime</artifactId>
+            <version>${antlr.version}</version>
+          <!--  <type>jar</type>
+            <scope>compile</scope>-->
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+       <!-- <pluginManagement>  注释Plugins可以显示anltr4-->
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.1</version>
+                </plugin>
+
+                <!--   要将源码放上去，需要加入这个插件    -->
+                <plugin>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>2.1</version>
+                    <configuration>
+                        <attach>true</attach>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>compile</phase>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.antlr</groupId>
+                    <artifactId>antlr4-maven-plugin</artifactId>
+                    <version>${antlr.version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>antlr4</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <visitor>true</visitor>
+                        <sourceDirectory>${basedir}/grammar</sourceDirectory>
+                        <libDirectory>${basedir}/grammar</libDirectory>
+                        <includes>
+                            <include>HiveLexer.g4</include>
+                            <include>HintParser.g4</include>
+                            <include>HiveParser.g4</include>
+                           <!-- <include>FromClauseParser.g4</include>-->
+                        </includes>
+                    </configuration>
+                </plugin>
+
+               <!--
+               目前该test插件存在问题 暂时不使用即可
+               <plugin>
+                    <groupId>com.khubla.antlr</groupId>
+                    <artifactId>antlr4test-maven-plugin</artifactId>
+                    <version>${antlr4test-maven-plugin.version}</version>
+                    <configuration>
+                        <verbose>false</verbose>
+                        <showTree>false</showTree>
+                        <entryPoint>statement</entryPoint>
+                        <grammarName>Hive 2.3.8</grammarName>
+                        <packageName></packageName>
+                        <caseInsensitiveType>UPPER</caseInsensitiveType>
+                        <exampleFiles>${basedir}/examples/</exampleFiles>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>test</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                -->
+            </plugins>
+       <!-- </pluginManagement>-->
+    </build>
+
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+</project>
